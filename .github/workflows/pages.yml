@@ -1,0 +1,60 @@
+name: Publicar página
+
+# Actualiza los animes favoritos (stats.json) y publica la web en GitHub Pages sin hacer commits.
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 5 * * *" # una vez al día
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Actualizar animes favoritos
+        run: node scripts/update-stats.mjs
+
+      - name: Preparar la web
+        run: |
+          mkdir _site
+          cp -r index.html styles.css icons.svg stats.json img js _site/
+          # Versión en las URLs del CSS, los iconos y el JS para que el navegador no use una copia antigua
+          V="${GITHUB_SHA::7}"
+          sed -i -e "s|href=\"styles.css\"|href=\"styles.css?v=$V\"|" \
+                 -e "s|src=\"js/main.js\"|src=\"js/main.js?v=$V\"|" \
+                 -e "s|icons.svg#|icons.svg?v=$V#|g" _site/index.html
+          sed -i -E "s|from \"(\./[a-z-]+\.js)\"|from \"\1?v=$V\"|" _site/js/*.js
+          grep -q "styles.css?v=" _site/index.html
+          grep -q "main.js?v=" _site/index.html
+          grep -q "icons.svg?v=" _site/index.html
+          grep -q "ui.js?v=" _site/js/main.js
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
