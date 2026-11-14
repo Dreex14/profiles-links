@@ -208,9 +208,14 @@ ul, ol { list-style: none; }
   font-size: 24px;
   color: var(--ink, #fff);
   background: var(--brand);
-  box-shadow: 0 6px 16px -8px var(--brand);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 6px 16px -8px var(--brand);
   transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
 }
+
+/* Iconos reales de la web: ocupan todo el cuadrado */
+.link-icon.is-art { overflow: hidden; }
+.link-icon.is-art > .i { width: 100%; height: 100%; }
+.link-icon.is-art > img { width: 100%; height: 100%; padding: 5px; object-fit: contain; }
 
 .link-text {
   display: flex;
@@ -245,7 +250,7 @@ ul, ol { list-style: none; }
     border-color: color-mix(in srgb, var(--brand) 45%, var(--line));
     box-shadow: 0 12px 30px -18px color-mix(in srgb, var(--brand) 60%, transparent);
   }
-  .link:hover .link-icon { transform: scale(1.06); box-shadow: 0 8px 20px -6px var(--brand); }
+  .link:hover .link-icon { transform: scale(1.06); }
   .link:hover .link-arrow { color: var(--brand); transform: translate(2px, -2px); }
 }
 .link:active { transform: translateY(0); background: var(--s2); }
