@@ -205,10 +205,11 @@ ul, ol { list-style: none; }
   width: 44px;
   height: 44px;
   border-radius: var(--r-sm);
-  font-size: 22px;
-  color: var(--brand);
-  background: color-mix(in srgb, var(--brand) 13%, transparent);
-  transition: background-color var(--fast) var(--ease);
+  font-size: 24px;
+  color: var(--ink, #fff);
+  background: var(--brand);
+  box-shadow: 0 6px 16px -8px var(--brand);
+  transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
 }
 
 .link-text {
@@ -244,7 +245,7 @@ ul, ol { list-style: none; }
     border-color: color-mix(in srgb, var(--brand) 45%, var(--line));
     box-shadow: 0 12px 30px -18px color-mix(in srgb, var(--brand) 60%, transparent);
   }
-  .link:hover .link-icon { background: color-mix(in srgb, var(--brand) 20%, transparent); }
+  .link:hover .link-icon { transform: scale(1.06); box-shadow: 0 8px 20px -6px var(--brand); }
   .link:hover .link-arrow { color: var(--brand); transform: translate(2px, -2px); }
 }
 .link:active { transform: translateY(0); background: var(--s2); }
@@ -359,7 +360,7 @@ ul, ol { list-style: none; }
   .avatar { width: 88px; height: 88px; }
   .name { font-size: 27px; }
   .link { min-height: 60px; gap: 12px; padding-right: 14px; }
-  .link-icon { width: 40px; height: 40px; font-size: 20px; }
+  .link-icon { width: 40px; height: 40px; font-size: 22px; }
   .link-text strong { font-size: 15.5px; }
   .link-text span { font-size: 13px; }
   .covers { gap: 10px; }
